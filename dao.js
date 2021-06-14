@@ -45,7 +45,7 @@ exports.getCourse = (code) => {
 // get all exams
 exports.listExams = () => {
   return new Promise((resolve, reject) => {
-    const sql = 'SELECT coursecode, score, date FROM exam2';
+    const sql = 'SELECT coursecode, score, date FROM exam';
 
     db.all(sql, (err, rows) => {
       if (err) {
@@ -66,10 +66,10 @@ exports.listExams = () => {
 };
 
 // add a new exam
-exports.createExam = (exam, userId) => {
+exports.createExam = (exam) => {
   return new Promise((resolve, reject) => {
-    const sql = 'INSERT INTO exam(coursecode, date, score, userid) VALUES(?, DATE(?), ?, ?)';
-    db.run(sql, [exam.code, exam.date, exam.score, userId], function (err) {
+    const sql = 'INSERT INTO exam(coursecode, date, score) VALUES(?, DATE(?), ?)';
+    db.run(sql, [exam.code, exam.date, exam.score], function (err) {
       if (err) {
         reject(err);
         return;
@@ -80,10 +80,10 @@ exports.createExam = (exam, userId) => {
 };
 
 // update an existing exam
-exports.updateExam = (exam, userId) => {
+exports.updateExam = (exam) => {
   return new Promise((resolve, reject) => {
-    const sql = 'UPDATE exam SET date=DATE(?), score=? WHERE coursecode = ? AND userid = ?';
-    db.run(sql, [exam.date, exam.score, exam.code, userId], function (err) {
+    const sql = 'UPDATE exam SET date=DATE(?), score=? WHERE coursecode = ?';
+    db.run(sql, [exam.date, exam.score, exam.code], function (err) {
       if (err) {
         reject(err);
         return;
@@ -94,10 +94,10 @@ exports.updateExam = (exam, userId) => {
 };
 
 // delete an existing exam
-exports.deleteExam = (courseCode, userId) => {
+exports.deleteExam = (courseCode) => {
   return new Promise((resolve, reject) => {
-    const sql = 'DELETE FROM exam WHERE coursecode = ? AND userid = ?';
-    db.run(sql, [courseCode, userId], (err) => {
+    const sql = 'DELETE FROM exam WHERE coursecode = ?';
+    db.run(sql, [courseCode], (err) => {
       if (err) {
         reject(err);
         return;
