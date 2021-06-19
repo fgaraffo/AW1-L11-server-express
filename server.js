@@ -90,7 +90,7 @@ app.post('/api/exams', [
     const date = dayjs(req.body.date);
 
     if (!date.isBefore())
-        return res.status(400).json({ error: `La data ${date.format('DD/MM/YYYY')} non è valida.` });
+        return res.status(422).json({ error: `La data ${date.format('DD/MM/YYYY')} non è valida.` });
 
     const exam = {
         code: req.body.code,
@@ -103,7 +103,7 @@ app.post('/api/exams', [
 
     examDao.createExam(exam)
         .then(() => res.status(201).end())
-        .catch((err) => res.status(500).json({ error: `DB Error during the creation of exam ${exam.code}` }));
+        .catch((err) => res.status(503).json({ error: `DB Error during the creation of exam ${exam.code}` }));
 
 });
 
@@ -129,11 +129,11 @@ app.put('/api/exams', [
     const date = dayjs(req.body.date);
 
     if (!date.isBefore())
-        return res.status(400).json({ error: `La data ${date.format('DD/MM/YYYY')} non è valida.` });
+        return res.status(422).json({ error: `La data ${date.format('DD/MM/YYYY')} non è valida.` });
 
     examDao.updateExam(exam)
         .then((id) => res.status(200).json({ ID: id, message: `Exam ${req.body.code} updated.` }))
-        .catch((err) => res.status(500).json({ error: `DB Error during the update of exam ${exam.code}` }))
+        .catch((err) => res.status(503).json({ error: `DB Error during the update of exam ${exam.code}` }))
 
 });
 
@@ -149,8 +149,8 @@ app.delete('/api/exams/:code', [
         }
 
         examDao.deleteExam(req.params.code)
-            .then(() => res.status(200).json({ message: `Exam ${req.params.code} deleted.` }))
-            .catch((err) => res.status(500).json({ error: 'DB error' }));
+            .then(() => res.status(204).json({ message: `Exam ${req.params.code} deleted.` }))
+            .catch((err) => res.status(503).json({ error: 'DB error' }));
 
     });
 
