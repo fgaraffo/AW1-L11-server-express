@@ -52,7 +52,7 @@ exports.listExams = () => {
           {
             code: e.coursecode,
             score: e.score,
-            date: e.date,
+            date: e.date
           }));
   
         resolve(exams);

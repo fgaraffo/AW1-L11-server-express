@@ -39,7 +39,7 @@ app.use(express.json());
 // GET /api/courses
 app.get('/api/courses', async (req, res) => {
     try {
-        const courses = await dao.listCourses();
+        const courses = await examDao.listCourses();
         res.status(200).json(courses);
     } catch (err) {
         res.status(500).json({ error: 'Errore DB' });
@@ -102,7 +102,7 @@ app.post('/api/exams', [
     //res.status(201).end();
 
     examDao.createExam(exam)
-        .then(() => res.status(201).end())
+        .then(() => setTimeout(() => res.status(201).end(), 2000))
         .catch((err) => res.status(503).json({ error: `DB Error during the creation of exam ${exam.code}` }));
 
 });
@@ -132,7 +132,7 @@ app.put('/api/exams', [
         return res.status(422).json({ error: `La data ${date.format('DD/MM/YYYY')} non è valida.` });
 
     examDao.updateExam(exam)
-        .then((id) => res.status(200).json({ ID: id, message: `Exam ${req.body.code} updated.` }))
+        .then((id) => setTimeout(res.status(200).json({ ID: id, message: `Exam ${req.body.code} updated.` }), 2000))
         .catch((err) => res.status(503).json({ error: `DB Error during the update of exam ${exam.code}` }))
 
 });
@@ -149,7 +149,7 @@ app.delete('/api/exams/:code', [
         }
 
         examDao.deleteExam(req.params.code)
-            .then(() => res.status(204).json({ message: `Exam ${req.params.code} deleted.` }))
+            .then(() => setTimeout(res.status(204).json({ message: `Exam ${req.params.code} deleted.` }), 2000))
             .catch((err) => res.status(503).json({ error: 'DB error' }));
 
     });
