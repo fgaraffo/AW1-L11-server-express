@@ -40,7 +40,7 @@ app.use(express.json());
 app.get('/api/courses', async (req, res) => {
     try {
         const courses = await examDao.listCourses();
-        res.status(200).json(courses);
+        setTimeout(()=>res.status(200).json(courses), 2000);
     } catch (err) {
         res.status(500).json({ error: 'Errore DB' });
     }
