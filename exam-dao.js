@@ -38,11 +38,11 @@ exports.getCourse = (code) => {
 };
 
 // get all exams
-exports.listExams = () => {
+exports.listExams = (userId) => {
     return new Promise((resolve, reject) => {
-      const sql = 'SELECT coursecode, score, date FROM exam';
+      const sql = 'SELECT coursecode, score, date FROM exam WHERE userid = ?';
   
-      db.all(sql, (err, rows) => {
+      db.all(sql, [userId], (err, rows) => {
         if (err) {
           reject(err);
           return;
@@ -61,10 +61,10 @@ exports.listExams = () => {
   };
 
   // add a new exam
-exports.createExam = (exam) => {
+exports.createExam = (exam, userId) => {
     return new Promise((resolve, reject) => {
-      const sql = 'INSERT INTO exam(coursecode, date, score) VALUES(?, DATE(?), ?)';
-      db.run(sql, [exam.code, exam.date, exam.score], function (err) {
+      const sql = 'INSERT INTO exam(coursecode, date, score, userid) VALUES(?, DATE(?), ?, ?)';
+      db.run(sql, [exam.code, exam.date, exam.score, userId], function (err) {
         if (err) {
           reject(err);
           return;
@@ -75,10 +75,10 @@ exports.createExam = (exam) => {
   };
 
   // update an existing exam
-exports.updateExam = (exam) => {
+exports.updateExam = (exam, userId) => {
     return new Promise((resolve, reject) => {
-      const sql = 'UPDATE exam SET date=DATE(?), score=? WHERE coursecode = ?';
-      db.run(sql, [exam.date, exam.score, exam.code], function (err) {
+      const sql = 'UPDATE exam SET date=DATE(?), score=? WHERE coursecode = ? AND userid = ?';
+      db.run(sql, [exam.date, exam.score, exam.code, userId], function (err) {
         if (err) {
           reject(err);
           return;
@@ -89,10 +89,10 @@ exports.updateExam = (exam) => {
   };
   
   // delete an existing exam
-exports.deleteExam = (courseCode) => {
+exports.deleteExam = (courseCode, userId) => {
     return new Promise((resolve, reject) => {
-      const sql = 'DELETE FROM exam WHERE coursecode = ?';
-      db.run(sql, [courseCode], (err) => {
+      const sql = 'DELETE FROM exam WHERE coursecode = ? AND userid = ?';
+      db.run(sql, [courseCode, userId], (err) => {
         if (err) {
           reject(err);
           return;
